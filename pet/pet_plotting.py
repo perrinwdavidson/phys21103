@@ -10,7 +10,7 @@ from skimage.transform import iradon
 
 # load data -----------------------------------------------
 # set number of sources ::
-src_num = 2
+src_num = 3
 
 # set filename and angle step (need to update accordingly) ::
 if src_num == 1:
@@ -54,6 +54,10 @@ sino = sino.interpolate(
     method='linear',
     axis=1
 )
+
+# replace extra nans ::
+if src_num == 3:
+    sino = sino.fillna(250)
 
 # return to numpy ::
 sino = sino.to_numpy()
