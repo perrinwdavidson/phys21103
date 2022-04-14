@@ -9,8 +9,25 @@ from scipy import ndimage
 from skimage.transform import iradon
 
 # load data -----------------------------------------------
-# set filename ::
-data_filename = 'io/inputs/sinogram/Sinogram_Apr07_Time_21_31_05.csv'
+# set number of sources ::
+src_num = 2
+
+# set filename and angle step (need to update accordingly) ::
+if src_num == 1:
+    data_filename = 'io/inputs/sinogram/Sinogram_Apr14_Time_19_32_17.csv'
+    angle_step = 45
+    dist_step = 1.0
+    high_val = 6E2
+elif src_num == 2:
+    data_filename = 'io/inputs/sinogram/Sinogram_Apr07_Time_20_24_32.csv'
+    angle_step = 45
+    dist_step = 1.0
+    high_val = 6E3
+else:
+    data_filename = 'io/inputs/sinogram/Sinogram_Apr07_Time_21_31_05.csv'
+    angle_step = 5
+    dist_step = 1.0
+    high_val = 5E3
 
 # load raw data ::
 data = pd.read_csv(data_filename, delimiter=',', header=None)
@@ -21,28 +38,22 @@ sino = sino.astype(float)
 
 # get angles ::
 angles = []
-angle_step = 5
 for i in range(np.shape(sino)[0]):
     angles.append(i * angle_step)
 
 # get distances ::
 dists = []
-dist_step = 1.0
 for i in range(np.shape(sino)[1]):
     dists.append(i * dist_step)
 
 # quality control -----------------------------------------
 # remove high values ::
-high_val = 5E3
 sino[sino >= high_val] = np.nan
 sino = pd.DataFrame(sino, dtype=float)
 sino = sino.interpolate(
     method='linear',
     axis=1
 )
-
-# FIX THIS fill remaining nans ::
-sino = sino.fillna(250)
 
 # return to numpy ::
 sino = sino.to_numpy()
