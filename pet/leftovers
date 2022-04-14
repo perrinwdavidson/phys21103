@@ -1,0 +1,19 @@
+# set plotting parameters ::
+dist_grid, angle_grid = np.meshgrid(dists, angles)
+
+# plot ::
+fig, ax = plt.subplots()
+plt.contourf(
+    dist_grid,
+    angle_grid,
+    sino
+)
+
+# set titles ::
+ax.set_title('Sinogram')
+ax.set_xlabel('Distance (cm)')
+ax.set_ylabel('Angles (degrees)')
+
+# show and close ::
+plt.show()
+plt.close()
